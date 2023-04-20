@@ -1,0 +1,55 @@
+using System;
+using System.IO;
+using System.Windows.Forms;
+
+namespace TextEditor
+{
+    public partial class MainForm : Form
+    {
+        string filePath;
+
+        public MainForm()
+        {
+            InitializeComponent();
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                filePath = openFileDialog.FileName;
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    richTextBox1.Text = reader.ReadToEnd();
+                }
+            }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (filePath == null)
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    filePath = saveFileDialog.FileName;
+                }
+            }
+
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                writer.Write(richTextBox1.Text);
+            }
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+    }
+}
